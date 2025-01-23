@@ -2,13 +2,19 @@
 
 # npm-progress-tracker
 
-A package to track the download speed, time, and progress of npm package installations.
+A powerful Node.js package that provides real-time tracking of npm package downloads and installations with detailed progress information.
+
+## Features
+
+- 📊 Real-time download progress tracking
+- ⏱️ Download speed monitoring
+- 🔄 Installation progress with stages
+- ⌛ Time remaining estimation
+- 📈 Progress bar visualization
 
 ## Installation
 
-To install the package, run:
-
-```
+```bash
 npm install npm-progress-tracker
 ```
 
