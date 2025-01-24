@@ -34,7 +34,9 @@ class NpmProgressTracker extends events_1.EventEmitter {
                 progress,
                 packageName,
                 speed: stats.speed,
-                timeLeft: stats.eta
+                timeLeft: stats.eta,
+                transferred: stats.transferred,
+                total: stats.total
             });
             if (progress === 100) {
                 this.emit('download-complete', {
@@ -54,7 +56,9 @@ class NpmProgressTracker extends events_1.EventEmitter {
                 progress: stats.progress,
                 packageName,
                 stage: stats.stage,
-                elapsedTime: Date.now() - this.startTime
+                elapsedTime: Date.now() - this.startTime,
+                transferred: undefined,
+                total: undefined
             });
             if (stats.progress === 100) {
                 this.emit('install-complete', {
@@ -81,4 +85,5 @@ class NpmProgressTracker extends events_1.EventEmitter {
     }
 }
 exports.default = NpmProgressTracker;
+__exportStar(require("./types"), exports);
 __exportStar(require("./types"), exports);

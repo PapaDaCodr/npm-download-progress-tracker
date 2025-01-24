@@ -24,7 +24,7 @@ export class ProgressBar {
     }
 
     public update(options: ProgressOptions): void {
-        const downloaded = options.transferred ? 
+        const downloaded = (options.transferred && options.total) ? 
             `${(options.transferred / (1024 * 1024)).toFixed(2)}/${(options.total / (1024 * 1024)).toFixed(2)} MB` : '';
 
         this.bar.update(options.progress, {

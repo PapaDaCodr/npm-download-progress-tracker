@@ -2,10 +2,13 @@ import { EventEmitter } from 'events';
 import { ProgressBar } from './progress/utils';
 import { DownloadStats, InstallStats } from './types';
 
+
+
 class NpmProgressTracker extends EventEmitter {
   private startTime: number;
   private progressBar: ProgressBar;
   private isTracking: boolean;
+  private currentProgress: number = 0;
 
   constructor() {
     super();
@@ -60,7 +63,14 @@ class NpmProgressTracker extends EventEmitter {
     });
   }
 
+  public getCurrentProgress(): number {
+    return this.currentProgress;
+  }
+
   public updateProgress(type: 'download' | 'install', stats: DownloadStats | InstallStats): void {
+    if ('progress' in stats) {
+      this.currentProgress = stats.progress;
+    }
     this.emit(`${type}-progress`, stats);
   }
 
@@ -79,4 +89,5 @@ class NpmProgressTracker extends EventEmitter {
 }
 
 export default NpmProgressTracker;
+export * from './types';
 export * from './types';

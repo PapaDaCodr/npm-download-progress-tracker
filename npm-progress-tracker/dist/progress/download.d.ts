@@ -12,7 +12,6 @@ declare class DownloadTracker extends EventEmitter {
     startTracking(totalSize: number): void;
     updateProgress(bytesReceived: number): void;
     private calculateETA;
-    stopTracking(): void;
     getStatus(): {
         isTracking: boolean;
     };
