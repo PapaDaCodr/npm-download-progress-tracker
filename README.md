@@ -1,4 +1,3 @@
-
 # npm-progress-tracker
 
 A powerful Node.js package that provides real-time tracking of npm package downloads and installations with detailed progress information.
@@ -9,7 +8,8 @@ A powerful Node.js package that provides real-time tracking of npm package downl
 - ⏱️ Download speed monitoring
 - 🔄 Installation progress with stages
 - ⌛ Time remaining estimation
-- 📈 Progress bar visualization
+- 📈 Green progress bar visualization
+- 📦 Package size tracking
 
 ## Installation
 
@@ -17,42 +17,15 @@ A powerful Node.js package that provides real-time tracking of npm package downl
 npm install npm-progress-tracker
 ```
 
-## Usage
+import { NpmProgressTracker } from 'npm-progress-tracker';
 
-### Importing the Package
+const tracker = new NpmProgressTracker();
 
-```typescript
-import { DownloadTracker, InstallTracker } from 'npm-progress-tracker';
-```
+// Track package download
+tracker.trackDownload('your-package-name');
 
-### Download Tracking
+// Track package installation
+tracker.trackInstallation('your-package-name');
 
-To track the download speed and time of npm packages:
-
-```typescript
-const downloadTracker = new DownloadTracker();
-downloadTracker.startTracking();
-
-// After download is complete
-downloadTracker.stopTracking();
-```
-
-### Installation Tracking
-
-To track the installation time and progress of npm packages:
-
-```typescript
-const installTracker = new InstallTracker();
-installTracker.beginInstall();
-
-// After installation is complete
-installTracker.endInstall();
-```
-
-## Contributing
-
-Contributions are welcome! Please open an issue or submit a pull request.
-
-## License
-
-This project is licensed under the MIT License.
+// The progress bar shows:
+// package-name [===========] 45% || Speed: 1.2MB/s || ETA: 30s || 5.2/10.5 MB

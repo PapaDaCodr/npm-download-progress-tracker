@@ -1,29 +1,25 @@
 export interface ProgressData {
-    downloadSpeed: number; // in bytes per second
-    downloadTime: number; // in milliseconds
-    installationTime: number; // in milliseconds
-    progress: number; // percentage of completion
+    downloadSpeed: number;
+    downloadTime: number;
+    installationTime: number;
+    progress: number;
 }
-
 export interface TrackerOptions {
-    verbose?: boolean; // whether to log detailed progress information
-    onProgress?: (data: ProgressData) => void; // callback function for progress updates
+    verbose?: boolean;
+    onProgress?: (data: ProgressData) => void;
 }
-
 export interface DownloadStats {
     transferred: number;
     total: number;
     speed: number;
     eta: number;
 }
-
 export interface InstallStats {
     progress: number;
     stage: 'dependencies' | 'devDependencies' | 'peerDependencies';
     packageCount: number;
     completedCount: number;
 }
-
 export interface ProgressOptions {
     progress: number;
     packageName: string;
@@ -31,6 +27,4 @@ export interface ProgressOptions {
     timeLeft?: number;
     stage?: string;
     elapsedTime?: number;
-    transferred?: number;
-    total?: number;
 }

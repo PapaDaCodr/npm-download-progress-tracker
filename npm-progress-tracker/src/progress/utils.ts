@@ -7,9 +7,15 @@ export class ProgressBar {
 
     constructor() {
         this.bar = new cliProgress.SingleBar({
-            format: '{packageName} |' + colors.cyan('{bar}') + '| {percentage}% || Speed: {speed} || ETA: {eta}',
+            format: colors.white('{packageName}') + ' |' + 
+                   colors.green('{bar}') + '| ' + 
+                   colors.green('{percentage}%') + ' || ' +
+                   colors.cyan('Speed: {speed}') + ' || ' +
+                   colors.yellow('ETA: {eta}') + ' || ' +
+                   colors.magenta('{downloaded}'),
             barCompleteChar: '\u2588',
-            barIncompleteChar: '\u2591'
+            barIncompleteChar: '\u2591',
+            hideCursor: true
         });
     }
 
@@ -18,11 +24,15 @@ export class ProgressBar {
     }
 
     public update(options: ProgressOptions): void {
+        const downloaded = options.transferred ? 
+            `${(options.transferred / (1024 * 1024)).toFixed(2)}/${(options.total / (1024 * 1024)).toFixed(2)} MB` : '';
+
         this.bar.update(options.progress, {
             packageName: options.packageName,
             speed: options.speed ? `${options.speed.toFixed(2)} MB/s` : 'N/A',
             eta: options.timeLeft ? `${Math.round(options.timeLeft)}s` : 'N/A',
-            stage: options.stage || 'downloading'
+            stage: options.stage || 'downloading',
+            downloaded: downloaded
         });
     }
 

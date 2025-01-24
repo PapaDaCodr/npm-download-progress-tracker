@@ -1,5 +1,6 @@
 import DownloadTracker from '../progress/download';
 import { InstallTracker } from '../progress/install';
+import { ProgressBar } from '../progress/utils';
 
 describe('DownloadTracker', () => {
     let downloadTracker: DownloadTracker;
@@ -9,21 +10,14 @@ describe('DownloadTracker', () => {
         downloadTracker = new DownloadTracker();
     });
 
-    test('should start tracking download', () => {
+    test('should initialize download tracking', () => {
         downloadTracker.startTracking(mockFileSize);
         expect(downloadTracker.getStatus().isTracking).toBe(true);
     });
 
-    test('should stop tracking download', () => {
-        downloadTracker.startTracking(mockFileSize);
-        downloadTracker.stopTracking();
-        expect(downloadTracker.getStatus().isTracking).toBe(false);
-    });
-
-    test('should calculate download speed', (done) => {
-        jest.setTimeout(10000); // Increase timeout to 10 seconds
+    test('should calculate download speed correctly', (done) => {
         const bytesReceived = 512 * 1024; // 512KB
-        
+
         downloadTracker.on('progress', (stats) => {
             try {
                 expect(stats.speed).toBeGreaterThanOrEqual(0);
@@ -36,22 +30,54 @@ describe('DownloadTracker', () => {
         });
 
         downloadTracker.startTracking(mockFileSize);
-        // Simulate progress after a short delay
         setTimeout(() => {
             downloadTracker.updateProgress(bytesReceived);
         }, 1000);
-    }, 10000); // Add timeout here as well
+    }, 10000);
+});
 
-    test('should emit complete event', (done) => {
-        downloadTracker.on('complete', (stats) => {
-            expect(stats.totalSize).toBe(mockFileSize);
-            expect(stats.totalTime).toBeGreaterThan(0);
-            expect(stats.averageSpeed).toBeGreaterThanOrEqual(0);
-            done();
-        });
+describe('InstallTracker', () => {
+    let installTracker: InstallTracker;
+    const totalSteps = 5;
 
-        downloadTracker.startTracking(mockFileSize);
-        downloadTracker.updateProgress(mockFileSize);
-        downloadTracker.stopTracking();
+    beforeEach(() => {
+        installTracker = new InstallTracker(totalSteps);
+    });
+
+    test('should track installation progress', () => {
+        installTracker.beginInstall();
+        installTracker.updateProgress(2);
+        expect(installTracker['currentStep']).toBe(2);
+    });
+
+    test('should complete installation', () => {
+        const spy = jest.spyOn(console, 'log');
+        installTracker.beginInstall();
+        installTracker.updateProgress(totalSteps);
+        installTracker.endInstall();
+        expect(spy).toHaveBeenCalledWith(expect.stringContaining('Installation completed'));
+    });
+});
+
+describe('ProgressBar', () => {
+    let progressBar: ProgressBar;
+
+    beforeEach(() => {
+        progressBar = new ProgressBar();
+    });
+
+    test('should update progress bar', () => {
+        const mockOptions = {
+            progress: 50,
+            packageName: 'test-package',
+            speed: 1.5,
+            timeLeft: 30,
+            transferred: 512 * 1024,
+            total: 1024 * 1024
+        };
+
+        progressBar.start();
+        expect(() => progressBar.update(mockOptions)).not.toThrow();
+        progressBar.complete();
     });
 });

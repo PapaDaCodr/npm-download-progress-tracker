@@ -1,6 +1,6 @@
 {
   "name": "npm-progress-tracker",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A package to track download speed, time, and progress of npm package installations.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -11,6 +11,7 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
+    "@openmrs/esm-error-handling": "^6.0.4",
     "cli-progress": "^3.12.0",
     "colors": "^1.4.0",
     "rxjs": "^7.0.0"
