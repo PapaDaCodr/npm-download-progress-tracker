@@ -14,3 +14,4 @@ declare class NpmProgressTracker extends EventEmitter {
 }
 export default NpmProgressTracker;
 export * from './types';
+export * from './types';

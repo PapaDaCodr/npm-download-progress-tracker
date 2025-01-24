@@ -1,6 +1,6 @@
 # npm-progress-tracker
 
-A powerful Node.js package that provides real-time tracking of npm package downloads and installations with detailed progress information.
+A powerful Node.js package that provides real-time tracking of npm package installations with beautiful progress bars.
 
 ## Features
 
@@ -14,18 +14,53 @@ A powerful Node.js package that provides real-time tracking of npm package downl
 ## Installation
 
 ```bash
-npm install npm-progress-tracker
+npm install -g npm-progress-tracker
 ```
 
-import { NpmProgressTracker } from 'npm-progress-tracker';
+## Usage
 
-const tracker = new NpmProgressTracker();
+Instead of using `npm install`, simply use:
 
-// Track package download
-tracker.trackDownload('your-package-name');
+```bash
+npm-track <package-name> #Install a specific package
+```
+or
+```bash
+npm-track #Install all packages in package.json
+```
 
-// Track package installation
-tracker.trackInstallation('your-package-name');
+or
+
+```bash
+npm-track -g #Install all packages in package.json globally
+```
+
+Common options:
+- `-D` or `--save-dev`: Save packages as dev dependencies
+- `-g` or `--global`: Install packages globally
+
+## Examples
+
+1. Install a single package:
+
+```bash
+npm-track express
+```
+
+2. Install multiple packages:
+```bash
+npm-track express lodash moment
+```
+
+3. Install dev dependencies:
+```bash
+npm-track -D typescript @types/node
+```
+
+4. Install all dependencies from package.json:
+```bash
+npm-track
+```
 
 // The progress bar shows:
 // package-name [===========] 45% || Speed: 1.2MB/s || ETA: 30s || 5.2/10.5 MB

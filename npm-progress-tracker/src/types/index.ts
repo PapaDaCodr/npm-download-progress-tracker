@@ -31,6 +31,6 @@ export interface ProgressOptions {
     timeLeft?: number;
     stage?: string;
     elapsedTime?: number;
-    transferred?: number;
-    total?: number;
+    transferred?: number | undefined;
+    total?: number | undefined;
 }
