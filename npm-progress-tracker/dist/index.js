@@ -19,6 +19,7 @@ const utils_1 = require("./progress/utils");
 class NpmProgressTracker extends events_1.EventEmitter {
     constructor() {
         super();
+        this.currentProgress = 0;
         this.startTime = Date.now();
         this.progressBar = new utils_1.ProgressBar();
         this.isTracking = false;
@@ -34,9 +35,7 @@ class NpmProgressTracker extends events_1.EventEmitter {
                 progress,
                 packageName,
                 speed: stats.speed,
-                timeLeft: stats.eta,
-                transferred: stats.transferred,
-                total: stats.total
+                timeLeft: stats.eta
             });
             if (progress === 100) {
                 this.emit('download-complete', {
@@ -56,9 +55,7 @@ class NpmProgressTracker extends events_1.EventEmitter {
                 progress: stats.progress,
                 packageName,
                 stage: stats.stage,
-                elapsedTime: Date.now() - this.startTime,
-                transferred: undefined,
-                total: undefined
+                elapsedTime: Date.now() - this.startTime
             });
             if (stats.progress === 100) {
                 this.emit('install-complete', {
@@ -68,7 +65,13 @@ class NpmProgressTracker extends events_1.EventEmitter {
             }
         });
     }
+    getCurrentProgress() {
+        return this.currentProgress;
+    }
     updateProgress(type, stats) {
+        if ('progress' in stats) {
+            this.currentProgress = stats.progress;
+        }
         this.emit(`${type}-progress`, stats);
     }
     finish() {

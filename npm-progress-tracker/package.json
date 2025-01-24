@@ -1,23 +1,26 @@
 {
   "name": "npm-progress-tracker",
-  "version": "1.0.7",
-  "description": "A package to track download speed, time, and progress of npm package installations.",
+  "version": "1.0.14",
+  "description": "Track npm installations with a beautiful progress bar",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "bin": {
+    "npm-track": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "scripts": {
-    "test": "jest --config jest.config.js",
     "build": "tsc",
-    "prepare": "npm run build",
-    "test:watch": "jest --watch",
-    "test:demo": "ts-node examples/test.ts"
+    "prepare": "npm run build"
   },
   "dependencies": {
-    "@openmrs/esm-error-handling": "^6.0.4",
-    "cli-progress": "^3.12.0",
     "colors": "^1.4.0",
     "rxjs": "^7.0.0",
     "commander": "^11.0.0",
-    "child_process": "^1.0.2"
+    "child_process": "^1.0.2",
+    "cli-progress": "^3.12.0"
   },
   "devDependencies": {
     "@types/cli-progress": "^3.11.6",
@@ -26,8 +29,5 @@
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
     "typescript": "^4.9.5"
-  },
-  "bin": {
-    "npm-track": "./dist/cli.js"
   }
 }

@@ -5,9 +5,11 @@ declare class NpmProgressTracker extends EventEmitter {
     private startTime;
     private progressBar;
     private isTracking;
+    private currentProgress;
     constructor();
     trackDownload(packageName: string): void;
     trackInstallation(packageName: string): void;
+    getCurrentProgress(): number;
     updateProgress(type: 'download' | 'install', stats: DownloadStats | InstallStats): void;
     finish(): void;
     private formatBytes;
