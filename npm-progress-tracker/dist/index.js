@@ -78,7 +78,6 @@ class NpmProgressTracker extends events_1.EventEmitter {
         this.isTracking = true;
         this.progressBar.start();
         this.currentProgress = 0;
-        // Remove any existing listeners to prevent duplicates
         this.removeAllListeners('install-progress');
         this.removeAllListeners('install-complete');
         this.on('install-progress', (stats) => {
@@ -90,7 +89,6 @@ class NpmProgressTracker extends events_1.EventEmitter {
                 elapsedTime: Date.now() - this.startTime,
                 packageCount: stats.packageCount,
                 completedCount: stats.completedCount,
-                // Add default values for required properties
                 speed: undefined,
                 timeLeft: undefined
             });
@@ -143,7 +141,7 @@ class NpmProgressTracker extends events_1.EventEmitter {
             console.log(colors_1.default.green(`├─ Main Package: ${this.formatBytes(sizeInfo.size)}`));
             console.log(colors_1.default.green(`├─ Dependencies: ${this.formatBytes(Object.values(sizeInfo.dependencies).reduce((a, b) => a + b, 0))}`));
             console.log(colors_1.default.green(`└─ Total Size: ${this.formatBytes(totalSize)}`));
-            // Use a realistic network speed (1MB/s as default)
+            // Using a realistic network speed (1MB/s as default)
             const networkSpeed = 1024 * 1024; // 1MB/s
             const estimatedTime = this.estimator.estimateInstallTime(totalSize, networkSpeed);
             // Only show estimation if it's meaningful
