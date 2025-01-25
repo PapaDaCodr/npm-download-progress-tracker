@@ -10,12 +10,11 @@ const program = new Command();
 const tracker = new NpmProgressTracker();
 
 function trackPackageDownload(packageName: string) {
-  return new Promise((resolve) => {
+  return new Promise<void>((resolve) => {
     const url = `https://registry.npmjs.org/${packageName}`;
     https.get(url, (response) => {
       const contentLength = parseInt(response.headers['content-length'] || '0', 10);
       let downloadedBytes = 0;
-      let lastBytes = 0;
       let lastTime = Date.now();
 
       tracker.trackDownload(packageName);
@@ -25,9 +24,8 @@ function trackPackageDownload(packageName: string) {
         const currentTime = Date.now();
         const timeDiff = currentTime - lastTime;
         
-        // Calculate speed only if enough time has passed (avoid division by zero)
         const speed = timeDiff > 0 
-          ? ((chunk.length / 1024 / 1024) / (timeDiff / 1000)) // MB/s
+          ? ((chunk.length / 1024 / 1024) / (timeDiff / 1000))
           : 0;
 
         const remainingBytes = contentLength - downloadedBytes;
@@ -40,17 +38,27 @@ function trackPackageDownload(packageName: string) {
           eta: eta
         });
 
-        lastBytes = downloadedBytes;
         lastTime = currentTime;
       });
 
       response.on('end', () => {
-        resolve(true);
+        // Force 100% progress on completion
+        tracker.updateProgress('download', {
+          transferred: contentLength,
+          total: contentLength,
+          speed: 0,
+          eta: 0
+        });
+        setTimeout(resolve, 500); // Give time for the progress bar to update
+      });
+
+      response.on('error', () => {
+        tracker.finish();
+        resolve();
       });
     });
   });
 }
-
 program
   .name('npm-track')
   .description('Track npm installations with beautiful progress bars')
@@ -60,13 +68,15 @@ program
   .action(async (packages, options) => {
     const args = ['install'];
     
-    if (packages.length > 0) {
-      args.push(...packages);
-      // Track download progress for each package
-      for (const pkg of packages) {
-        await trackPackageDownload(pkg);
-      }
-    }
+if (packages.length > 0) {
+  args.push(...packages);
+  
+  // Track download progress for each package
+  for (const pkg of packages) {
+    await tracker.preInstallAnalysis(pkg);
+    await trackPackageDownload(pkg);
+  }
+}
     
     if (options.saveDev) {
       args.push('--save-dev');
@@ -88,18 +98,32 @@ program
     tracker.trackInstallation(packageName);
 
     let installProgress = 0;
-    npm.stdout.on('data', (data) => {
-      const output = data.toString();
-      if (output.includes('added') || output.includes('packages')) {
-        installProgress = Math.min(100, installProgress + 5);
-        tracker.updateProgress('install', {
-          progress: installProgress,
-          stage: 'dependencies',
-          packageCount: packages.length || 1,
-          completedCount: Math.floor(installProgress / 10)
-        });
-      }
-    });
+npm.stdout.on('data', (data) => {
+  const output = data.toString();
+  
+  // More granular progress tracking
+  if (output.includes('added')) {
+    const addedMatch = output.match(/(\d+)\s+packages/);
+    if (addedMatch) {
+      const packagesAdded = parseInt(addedMatch[1], 10);
+      const totalExpectedPackages = packages.length || 1;
+      installProgress = Math.min(100, (packagesAdded / totalExpectedPackages) * 100);
+    } else {
+      installProgress = Math.min(100, installProgress + 10);
+    }
+  } else if (output.includes('packages are looking for funding')) {
+    installProgress = 95;
+  } else if (output.includes('found') || output.includes('audited')) {
+    installProgress = 100;
+  }
+
+  tracker.updateProgress('install', {
+    progress: installProgress,
+    stage: 'dependencies',
+    packageCount: packages.length || 1,
+    completedCount: Math.ceil(installProgress / 100 * (packages.length || 1))
+  });
+});
 
     npm.stderr.on('data', (data) => {
       console.error(colors.yellow(`Warning: ${data}`));

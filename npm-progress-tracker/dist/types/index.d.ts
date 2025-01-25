@@ -27,6 +27,8 @@ export interface ProgressOptions {
     timeLeft?: number;
     stage?: string;
     elapsedTime?: number;
-    transferred?: number | undefined;
-    total?: number | undefined;
+    transferred?: number;
+    total?: number;
+    packageCount?: number;
+    completedCount?: number;
 }
