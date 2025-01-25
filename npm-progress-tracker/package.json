@@ -1,6 +1,6 @@
 {
   "name": "npm-progress-tracker",
-  "version": "1.0.20",
+  "version": "1.0.21",
   "description": "Track npm installations with a beautiful progress bar",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
