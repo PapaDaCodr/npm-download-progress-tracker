@@ -1,17 +1,24 @@
-# npm-progress-tracker
+# npm-progress-tracker 📦
 
-A powerful Node.js package that provides real-time tracking of npm package installations with beautiful progress bars.
+A powerful Node.js package that provides real-time tracking of npm package installations with beautiful progress bars and advanced analytics.
 
-## Features
+[![npm version](https://badge.fury.io/js/npm-progress-tracker.svg)](https://www.npmjs.com/package/npm-progress-tracker)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-- 📊 Real-time download progress tracking
-- ⏱️ Download speed monitoring
-- 🔄 Installation progress with stages
-- ⌛ Time remaining estimation
-- 📈 Green progress bar visualization
-- 📦 Package size tracking
+## ✨ Features
 
-## Installation
+- 📊 Real-time download progress tracking with speed monitoring
+- 📦 Package size analysis with dependency breakdown
+- ⚡ Network speed detection and optimization
+- 🔄 Smart installation time estimation based on historical data
+- 📈 Beautiful progress bars with detailed metrics
+- 🎯 Installation stage tracking (download, dependencies, peer deps)
+- ⌛ Accurate time remaining estimation
+- 🔍 Package cache detection
+- 🌐 Global and local installation support
+- 💻 Cross-platform compatibility (Windows, macOS, Linux)
+
+## 🚀 Installation
 
 ```bash
 npm install -g npm-progress-tracker
@@ -34,10 +41,6 @@ or
 ```bash
 npm-track -g #Install all packages in package.json globally
 ```
-
-Common options:
-- `-D` or `--save-dev`: Save packages as dev dependencies
-- `-g` or `--global`: Install packages globally
 
 ## Examples
 
@@ -62,5 +65,55 @@ npm-track -D typescript @types/node
 npm-track
 ```
 
-// The progress bar shows:
-// package-name [===========] 45% || Speed: 1.2MB/s || ETA: 30s || 5.2/10.5 MB
+## 📊 Progress Information
+
+The progress bar displays:
+
+express [██████████░░░░░] 67% || Speed: 1.2MB/s || ETA: 00:30 || 5.2/10.5 MB
+
+
+### Command Options
+
+| Option | Description |
+|--------|-------------|
+| `-D, --save-dev` | Save packages as development dependencies |
+| `-g, --global` | Install packages globally |
+| `--verbose` | Show detailed progress information |
+
+
+
+### Analysis Output
+
+Package Size Analysis:
+├─ Main Package: 2.5MB
+├─ Dependencies: 15.8MB
+└─ Total Size: 18.3MB
+
+Estimated Installation Time: 0h 1m 30s
+
+## 🛠 Technical Details
+
+### Network Speed Detection
+The package automatically detects your network speed for accurate download time estimation.
+
+### Installation Analytics
+Tracks and learns from previous installations to provide more accurate time estimates.
+
+### Progress Tracking Stages
+1. Package Analysis
+2. Download Progress
+3. Installation Progress
+4. Dependency Resolution
+5. Final Installation
+
+## 🤝 Contributing
+
+Contributions are welcome! Please check our [Contributing Guide](CONTRIBUTING.md) for details.
+
+## 📝 License
+
+MIT © [MIT]
+
+## 💖 Support
+
+If you find this package helpful, please consider giving it a star ⭐️
