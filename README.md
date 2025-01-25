@@ -107,7 +107,11 @@ Tracks and learns from previous installations to provide more accurate time esti
 5. Final Installation
 
 ## 🤝 Contributing
-
+I was inspired by [npm-progress-bar](https://github.com/npm/npm-progress-bar) and [npm-progress-bar](https://github.com/npm/npm-progress-bar) 
+and wanted to create a more accurate and informative package. 
+so I created this package, I hope you find it useful.
+The yarn version is out now 
+isaacobenzy is the author of the yarn version.
 Contributions are welcome! Please check our [Contributing Guide](CONTRIBUTING.md) for details.
 
 ## 📝 License
