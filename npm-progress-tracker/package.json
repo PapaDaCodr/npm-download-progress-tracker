@@ -1,6 +1,6 @@
 {
   "name": "npm-progress-tracker",
-  "version": "1.0.14",
+  "version": "1.0.20",
   "description": "Track npm installations with a beautiful progress bar",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -16,11 +16,14 @@
     "prepare": "npm run build"
   },
   "dependencies": {
-    "colors": "^1.4.0",
-    "rxjs": "^7.0.0",
-    "commander": "^11.0.0",
     "child_process": "^1.0.2",
-    "cli-progress": "^3.12.0"
+    "cli-progress": "^3.12.0",
+    "colors": "^1.4.0",
+    "commander": "^11.0.0",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mongoose": "^8.9.5",
+    "rxjs": "^7.0.0"
   },
   "devDependencies": {
     "@types/cli-progress": "^3.11.6",
