@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.calculateSpeed = exports.formatTime = exports.ProgressBar = void 0;
+exports.formatETA = exports.calculateSpeed = exports.formatTime = exports.ProgressBar = void 0;
 const cli_progress_1 = __importDefault(require("cli-progress"));
 const colors_1 = __importDefault(require("colors"));
 class ProgressBar {
@@ -13,11 +13,12 @@ class ProgressBar {
                 colors_1.default.green('{bar}') + '| ' +
                 colors_1.default.green('{percentage}%') + ' || ' +
                 colors_1.default.cyan('Speed: {speed}') + ' || ' +
-                colors_1.default.yellow('ETA: {eta}') + ' || ' +
+                colors_1.default.yellow('Time remaining: {eta}') + ' || ' +
                 colors_1.default.magenta('{downloaded}'),
             barCompleteChar: '\u2588',
             barIncompleteChar: '\u2591',
-            hideCursor: true
+            hideCursor: true,
+            fps: 10 // Limit update frequency
         });
     }
     start() {
@@ -26,10 +27,16 @@ class ProgressBar {
     update(options) {
         const downloaded = (options.transferred && options.total) ?
             `${(options.transferred / (1024 * 1024)).toFixed(2)}/${(options.total / (1024 * 1024)).toFixed(2)} MB` : '';
+        const formattedSpeed = options.speed
+            ? `${options.speed.toFixed(2)} MB/s`
+            : 'N/A';
+        const formattedETA = options.timeLeft
+            ? formatETA(options.timeLeft)
+            : 'N/A';
         this.bar.update(options.progress, {
             packageName: options.packageName,
-            speed: options.speed ? `${options.speed.toFixed(2)} MB/s` : 'N/A',
-            eta: options.timeLeft ? `${Math.round(options.timeLeft)}s` : 'N/A',
+            speed: formattedSpeed,
+            eta: formattedETA,
             stage: options.stage || 'downloading',
             downloaded: downloaded
         });
@@ -52,3 +59,11 @@ function calculateSpeed(bytes, milliseconds) {
     return `${speedInKbps.toFixed(2)} KB/s`;
 }
 exports.calculateSpeed = calculateSpeed;
+function formatETA(seconds) {
+    if (!seconds || !isFinite(seconds))
+        return 'N/A';
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = Math.floor(seconds % 60);
+    return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+}
+exports.formatETA = formatETA;

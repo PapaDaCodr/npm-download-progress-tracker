@@ -15,17 +15,33 @@ function trackPackageDownload(packageName: string) {
     https.get(url, (response) => {
       const contentLength = parseInt(response.headers['content-length'] || '0', 10);
       let downloadedBytes = 0;
+      let lastBytes = 0;
+      let lastTime = Date.now();
 
       tracker.trackDownload(packageName);
 
       response.on('data', (chunk) => {
         downloadedBytes += chunk.length;
+        const currentTime = Date.now();
+        const timeDiff = currentTime - lastTime;
+        
+        // Calculate speed only if enough time has passed (avoid division by zero)
+        const speed = timeDiff > 0 
+          ? ((chunk.length / 1024 / 1024) / (timeDiff / 1000)) // MB/s
+          : 0;
+
+        const remainingBytes = contentLength - downloadedBytes;
+        const eta = speed > 0 ? remainingBytes / (speed * 1024 * 1024) : 0;
+
         tracker.updateProgress('download', {
           transferred: downloadedBytes,
           total: contentLength,
-          speed: chunk.length, // Simplified speed calculation
-          eta: (contentLength - downloadedBytes) / chunk.length
+          speed: speed,
+          eta: eta
         });
+
+        lastBytes = downloadedBytes;
+        lastTime = currentTime;
       });
 
       response.on('end', () => {
